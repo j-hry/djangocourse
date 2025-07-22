@@ -1,5 +1,5 @@
-from django import forms
-from app.models import Article
+# from django import forms
+# from app.models import Article
 
 
 # html form can be defined by hand OR
@@ -19,10 +19,10 @@ from app.models import Article
 
 # OR use ModelForm to take care of data parsing and auto create a model 
 # when form is validated
-class CreateArticleForm(forms.ModelForm):
-    class Meta:
-        model = Article
-        # define which fields from model that html widgets should be created
-        fields = ("title", "status", "content", "word_count", "twitter_post")
+# class CreateArticleForm(forms.ModelForm):
+#     class Meta:
+#         model = Article
+#         # define which fields from model that html widgets should be created
+#         fields = ("title", "status", "content", "word_count", "twitter_post")
     
     
