@@ -55,7 +55,8 @@ ROOT_URLCONF = 'djangocourse.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        # DIRS is a list of templates that in which django will look for templates in order
+        'DIRS': [BASE_DIR / "templates"], # tell django to look for templates folder at root
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
