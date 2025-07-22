@@ -14,6 +14,8 @@ dependencies = [
 [tool.poetry]
 packages = [{include = "djangocourse", from = "src"}]
 
+[tool.djlint]
+ignore = "H030,H031"
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
