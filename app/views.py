@@ -3,20 +3,30 @@ from django.urls import reverse_lazy
 from app.models import Article
 
 # from app.forms import CreateArticleForm
-from django.views.generic import CreateView
+from django.views.generic import (
+    CreateView,
+    ListView,
+    UpdateView,
+    DeleteView)
 
 
 # Create your views here.
-def home(request):
-    # created models come with an object manager by default
-    # allow interactions with table, eg filtering and querying
-    articles = Article.objects.all()  # django ORM (obj r/s model)
 
-    # to render HTML template and insert articles inside it
-    # pass in request for template to use and template name: "app/home.html"
-    # and context {}dict, use the key "articles" to access all articles objects in list
-    return render(request, "app/home.html", {"articles": articles})
+# FBV for home
+# def home(request):
+#     # created models come with an object manager by default
+#     # allow interactions with table, eg filtering and querying
+#     articles = Article.objects.all()  # django ORM (obj r/s model)
 
+#     # to render HTML template and insert articles inside it
+#     # pass in request for template to use and template name: "app/home.html"
+#     # and context {}dict, use the key "articles" to access all articles objects in list
+#     return render(request, "app/home.html", {"articles": articles})
+
+class ArticleListView(ListView):
+    template_name = "app/home.html"
+    model = Article
+    context_object_name = "articles" # provides context for home.html    
 
 #### CLASS BASED VIEWS approach
 # does not require forms.py
@@ -32,6 +42,21 @@ class ArticleCreateView(CreateView):
     # destination calculated when article is created and sent to function
     # use reverse_lazy instd of reverse as home function may not be init as view when destination is calculated
     success_url = reverse_lazy("home")
+    
+    
+# updating article is similar to create except form should not be empty
+class ArticleUpdateView(UpdateView):
+    template_name = "app/article_update.html"
+    model = Article 
+    fields = ["title", "status", "content", "word_count", "twitter_post"]  # form fields
+    success_url = reverse_lazy("home")
+    context_object_name = "article"
+
+class ArticleDeleteView(DeleteView):
+    template_name = "app/article_delete.html"
+    model = Article 
+    success_url = reverse_lazy("home")
+    context_object_name = "article"
 
 
 #### FUNCTION BASED VIEWS approach

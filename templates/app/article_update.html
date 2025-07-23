@@ -1,9 +1,9 @@
 {% extends 'app/base.html' %}
 {% block content %}
-  <h1>Create Article</h1>
+  <h1>Edit Article</h1>
+  {{ article.content }}
   <form method="post">
     {% csrf_token %}
-    {% comment %} render each label and field combination inside a <p> tag {% endcomment %}
     {{ form.as_p }}
     <button type="submit">Save</button>
   </form>
