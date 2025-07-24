@@ -1,3 +1,4 @@
+import re
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
@@ -17,7 +18,7 @@ class UserProfile(AbstractUser):
 class Article(models.Model):
     title = models.CharField(max_length=100)
     content = models.TextField(blank=True, default="")  # default is normally None
-    word_count = models.IntegerField()
+    word_count = models.IntegerField(blank=True, default="")
     twitter_post = models.TextField(blank=True, default="")
     # use Choices as an iterable containing tuples
     # tuples: (value inserted into database, value rendered in the dropdown box
@@ -26,3 +27,11 @@ class Article(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     # save current date when model is updated
     updated_at = models.DateTimeField(auto_now=True)
+    
+    # override the built in save method
+    def save(self, *args, **kwargs):
+        # match and replace html tags with ""
+        # replace newline characters with spaces
+        text = re.sub(r"<[^>]*>","", self.content).replace("&nbsp;", " ")
+        self.word_count = len(re.findall(r"\b\w+\b", text)) # find words
+        super().save(*args, **kwargs)

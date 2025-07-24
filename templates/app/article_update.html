@@ -1,10 +1,15 @@
 {% extends 'app/base.html' %}
 {% block content %}
   <h1>Edit Article</h1>
-  {{ article.content }}
+  <p>Article word count: {{ article.word_count }} word{{ article.word_count | pluralize }}</p>
+  <!-- pass the value to django date filter function as arg, date:<extra arg> -->
+  <p>Last edited on {{ article.updated_at | date:"jS F Y" }}</p>
   <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit">Save</button>
   </form>
+  <a href="{% url 'home' %}">Back to list</a>
+  <!-- passes article id to url <int:pk> tag -->
+  <a href="{% url 'delete_article' pk=article.id %}">Delete article</a>
 {% endblock content %}

@@ -3,8 +3,10 @@
   <h1>Create Article</h1>
   <form method="post">
     {% csrf_token %}
-    {% comment %} render each label and field combination inside a <p> tag {% endcomment %}
+    <!-- render each label and field combination inside a <p> tag -->
     {{ form.as_p }}
     <button type="submit">Save</button>
   </form>
+  <!-- target the name of the page, not the url / endpoint  -->
+  <a href="{% url 'home'%}">Back to list</a>
 {% endblock content %}

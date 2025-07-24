@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+import sys
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -49,6 +51,29 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+if DEBUG:
+    INSTALLED_APPS += [
+        "debug_toolbar"
+    ]
+    
+    MIDDLEWARE += [
+        "debug_toolbar.middleware.DebugToolbarMiddleware",
+    ]
+    
+    INTERNAL_IPS = ["127.0.0.1",]
+
+# TESTING = "test" in sys.argv or "PYTEST_VERSION" in os.environ
+
+# if not TESTING:
+#     INSTALLED_APPS = [
+#         *INSTALLED_APPS,
+#         "debug_toolbar",
+#     ]
+#     MIDDLEWARE = [
+#         "debug_toolbar.middleware.DebugToolbarMiddleware",
+#         *MIDDLEWARE,
+#     ]
 
 ROOT_URLCONF = 'djangocourse.urls'
 

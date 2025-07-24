@@ -36,7 +36,7 @@ class ArticleCreateView(CreateView):
     template_name = "app/article_create.html"
     model = Article  # specify model
     # can give list or tuple of fields
-    fields = ["title", "status", "content", "word_count", "twitter_post"]  # form fields
+    fields = ["title", "status", "content", "twitter_post"]  # form fields
     # specify where to go when article is successfully created
     # use reverse_lazy instd of redirect to calculate view to go to
     # destination calculated when article is created and sent to function
@@ -48,7 +48,7 @@ class ArticleCreateView(CreateView):
 class ArticleUpdateView(UpdateView):
     template_name = "app/article_update.html"
     model = Article 
-    fields = ["title", "status", "content", "word_count", "twitter_post"]  # form fields
+    fields = ["title", "status", "content", "twitter_post"]  # form fields
     success_url = reverse_lazy("home")
     context_object_name = "article"
 
