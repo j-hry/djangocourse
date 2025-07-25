@@ -47,8 +47,7 @@ ALLOWED_HOSTS.extend(['localhost', '127.0.0.1'])
 
 # Application definition
 
-INSTALLED_APPS = [
-    'app.apps.AppConfig', # to link our app and project
+DJANGO_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -56,6 +55,18 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 ]
+
+THIRD_PARTY_APPS = [
+    "allauth",
+    "allauth.account"
+]
+
+PROJECT_APPS = [
+    "apps.apps.AppConfig" # to link our app and project
+]
+
+INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + PROJECT_APPS
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -154,6 +165,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+LOGIN_REDIRECT_URL = "home"
+LOGOUT_REDIRECT_URL = "login"
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/

@@ -18,19 +18,21 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
+from django.views.generic.base import RedirectView
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("articles/", include("app.urls")),
+    path("/", RedirectView.as_view(pattern_name="home")),
+    path("accounts/", include("django.contrib.auth.urls")),
 ]
 
 # Only add debug toolbar URLs in development
 if settings.DEBUG:
     try:
         from debug_toolbar.toolbar import debug_toolbar_urls
+
         urlpatterns += debug_toolbar_urls()
     except ImportError:
         # debug_toolbar not available, skip it
         pass
-
-   

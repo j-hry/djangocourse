@@ -2,6 +2,8 @@ import re
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
+from django.conf import settings
+
 ARTICLE_STATUS = (
     ("draft", "draft"),
     ("inprogress", "in progress"),
@@ -28,10 +30,13 @@ class Article(models.Model):
     # save current date when model is updated
     updated_at = models.DateTimeField(auto_now=True)
     
+    # related_name allows user.articles to load all article objects that user created
+    creator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="articles")
+
     # override the built in save method
     def save(self, *args, **kwargs):
         # match and replace html tags with ""
         # replace newline characters with spaces
-        text = re.sub(r"<[^>]*>","", self.content).replace("&nbsp;", " ")
-        self.word_count = len(re.findall(r"\b\w+\b", text)) # find words
+        text = re.sub(r"<[^>]*>", "", self.content).replace("&nbsp;", " ")
+        self.word_count = len(re.findall(r"\b\w+\b", text))  # find words
         super().save(*args, **kwargs)

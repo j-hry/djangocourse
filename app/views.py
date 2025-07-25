@@ -1,14 +1,13 @@
+from typing import Any
+from django.db.models.query import QuerySet
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from app.models import Article
 
 # from app.forms import CreateArticleForm
-from django.views.generic import (
-    CreateView,
-    ListView,
-    UpdateView,
-    DeleteView)
+from django.views.generic import CreateView, ListView, UpdateView, DeleteView
 
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 # Create your views here.
 
@@ -23,16 +22,25 @@ from django.views.generic import (
 #     # and context {}dict, use the key "articles" to access all articles objects in list
 #     return render(request, "app/home.html", {"articles": articles})
 
-class ArticleListView(ListView):
+
+# mixin just adds some functionality/methods, (articlelistview is just a list view)
+# loginmixin protects the class view, requires login to access the view
+class ArticleListView(LoginRequiredMixin, ListView):
     template_name = "app/home.html"
     model = Article
-    context_object_name = "articles" # provides context for home.html    
+    context_object_name = "articles"  # provides context for home.html
+
+    def get_queryset(self) -> QuerySet[Any]:
+        # filter for articles created by user
+        # minus created_at sorts by newest articles at top
+        return Article.objects.filter(creator=self.request.user).order_by("-created_at")
+
 
 #### CLASS BASED VIEWS approach
 # does not require forms.py
 # django knows that this is to create a model, auto create a form
 # view will render the form and handle receiving form data
-class ArticleCreateView(CreateView):
+class ArticleCreateView(LoginRequiredMixin, CreateView):
     template_name = "app/article_create.html"
     model = Article  # specify model
     # can give list or tuple of fields
@@ -42,21 +50,37 @@ class ArticleCreateView(CreateView):
     # destination calculated when article is created and sent to function
     # use reverse_lazy instd of reverse as home function may not be init as view when destination is calculated
     success_url = reverse_lazy("home")
-    
-    
+
+    def form_valid(self, form):
+        # set article model creator to be current user
+        form.instance.creator = self.request.user
+        return super().form_valid(form)
+
+
 # updating article is similar to create except form should not be empty
-class ArticleUpdateView(UpdateView):
+# use userpassestest mixin to check that user is the one that created the article
+class ArticleUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     template_name = "app/article_update.html"
-    model = Article 
+    model = Article
     fields = ["title", "status", "content", "twitter_post"]  # form fields
     success_url = reverse_lazy("home")
     context_object_name = "article"
 
-class ArticleDeleteView(DeleteView):
+    # override test_func
+    def test_func(self) -> bool | None:
+        # returns true if user created article
+        return self.request.user == self.get_object().creator
+
+
+class ArticleDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     template_name = "app/article_delete.html"
-    model = Article 
+    model = Article
     success_url = reverse_lazy("home")
     context_object_name = "article"
+
+    def test_func(self) -> bool | None:
+        # returns true if user created article
+        return self.request.user == self.get_object().creator
 
 
 #### FUNCTION BASED VIEWS approach
