@@ -62,7 +62,7 @@ THIRD_PARTY_APPS = [
 ]
 
 PROJECT_APPS = [
-    "apps.apps.AppConfig" # to link our app and project
+    "app.apps.AppConfig" # to link our app and project
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + PROJECT_APPS
@@ -77,6 +77,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware'
 ]
 
 if DEBUG:
@@ -166,7 +167,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 LOGIN_REDIRECT_URL = "home"
-LOGOUT_REDIRECT_URL = "login"
+LOGOUT_REDIRECT_URL = "account_login"
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/

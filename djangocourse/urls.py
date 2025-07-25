@@ -23,8 +23,8 @@ from django.views.generic.base import RedirectView
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("articles/", include("app.urls")),
-    path("/", RedirectView.as_view(pattern_name="home")),
-    path("accounts/", include("django.contrib.auth.urls")),
+    path("", RedirectView.as_view(pattern_name="home")),
+    path("accounts/", include("allauth.urls")),
 ]
 
 # Only add debug toolbar URLs in development
