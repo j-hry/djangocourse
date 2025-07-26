@@ -171,6 +171,8 @@ AUTH_PASSWORD_VALIDATORS = [
 LOGIN_REDIRECT_URL = "home"
 LOGOUT_REDIRECT_URL = "account_login"
 
+# allauth settings
+
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 

@@ -23,7 +23,7 @@ def reverse_create_superuser(apps, schema_editor):
     from django.contrib.auth import get_user_model
 
     User = get_user_model()
-    User.objects.filter(username="admin").delete()
+    User.objects.filter(username="example_username").delete()
 
 
 class Migration(migrations.Migration):
